@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+      <div class="col-md-2">
+      </div>
+        <div class="col-md-8">
+            <h1>Kopyamakarna</h1>
+            {% for pasta in pastas %}
+                <li><a href="/pasta/{{ pasta.id }}" >{{pasta.title}}</a></li>
+            {% endfor %}
+        </div>
+      <div class="col-md-2"></div>
+</div>
+
+{% endblock content %}

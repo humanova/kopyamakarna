@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="posts" uuid="27053585-8626-4e88-a7a6-8d9f281ea90f">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\msi\Desktop\VSCode Folder\kopyamakarna\src\web\posts\posts.db</jdbc-url>
+    </data-source>
+  </component>
+</project>

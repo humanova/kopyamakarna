@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+      <div class="col-md-2">
+          <p>rastgele makarnalar</p>
+          {% for p in random_pastas %}
+                <li><a href="/pasta/{{ p.id }}" >{{p.title}}</a></li>
+          {% endfor %}
+      </div>
+        <div class="col-md-8">
+            <h1>{{pasta.title}}</h1>
+            <h5> <a href={{pasta.url}}> kaynak </a></h5>
+            {% autoescape false %}
+            <p>{{pasta.text}}</p>
+            {% endautoescape %}
+        </div>
+      <div class="col-md-2"></div>
+</div>
+
+{% endblock content %}
