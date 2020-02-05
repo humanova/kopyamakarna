@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row">
+      <div class="col-md-2">
+      </div>
+        <div class="col-md-8">
+            <form action="" class="form-inline" method="post">
+                <input type="text" class="form-control" placeholder="makarna" name="search_text" value="{{request.form.search_text}}">
+            </form>
+
+            {% if error_msg %}
+                <h2><a style="color:red">{{error_msg}}</a></h2>
+            {% endif %}
+
+            {% if res_list %}
+                <h5>{{res_count}} sonuc bulundu.</h5>
+                <br/>
+                {% for pasta in res_list%}
+                <h4><a href="/pasta/{{pasta.id}}">{{pasta.title}}</a></h4>
+                <p>👍{{pasta.upvote}}</p>
+                {% autoescape false %}
+                <p>{{pasta.text}}</p>
+                {% endautoescape %}
+                <br/> <br/>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+      <div class="col-md-2"></div>
+</div>
+
+
+
+{% endblock content %}

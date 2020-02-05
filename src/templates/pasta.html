@@ -9,9 +9,11 @@
       </div>
         <div class="col-md-8">
             <h1>{{pasta.title}}</h1>
-            <h5> <a href={{pasta.url}}> kaynak </a></h5>
+
+            <p>👍{{pasta.upvote}} - <a href={{pasta.url}}> kaynak </a> </p>
+            <button type="button" class="btn btn-primary" onclick="copyToClipboard('#{{pasta.id}}')">Kopyala</button>
             {% autoescape false %}
-            <p>{{pasta.text}}</p>
+            <p id="{{pasta.id}}">{{pasta.text}}</p>
             {% endautoescape %}
         </div>
       <div class="col-md-2"></div>

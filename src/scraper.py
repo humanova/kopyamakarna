@@ -24,7 +24,7 @@ class RedditScraper():
 
         post_data = []
         for post in hot_posts:
-            if post.is_self:
+            if post.is_self and post.score >= 1:
                 data = {
                     "title": post.title,
                     "url": "https://reddit.com" + post.permalink,

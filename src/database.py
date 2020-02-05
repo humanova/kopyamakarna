@@ -52,6 +52,15 @@ class DB:
         except Exception as e:
             print(f'Error while adding pasta : {e}')
 
+    def search_pasta_by_text(self, text):
+        pasta_list = []
+        pasta_list.append(Pasta.select().where(Pasta.title.contains(text)))
+        for p in Pasta.select().where(Pasta.text.contains(text)):
+            if p not in pasta_list:
+                pasta_list.append(p)
+        pasta_list.remove(pasta_list[0])
+        return pasta_list
+
     def get_pasta_by_id(self, id):
         try:
             pasta = Pasta.select().where(Pasta.id == id).get()
