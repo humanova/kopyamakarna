@@ -8,8 +8,9 @@ app = Flask("kopyamakarna", template_folder="src/templates")
 
 @app.route('/')
 def index():
-    # TODO : index page
-    return redirect(url_for('all'))
+    fp_pastas = db.get_all_frontpage_pasta()
+    return render_template('index.html', pastas=fp_pastas)
+    # return redirect(url_for('all'))
 
 @app.route('/all')
 def all():

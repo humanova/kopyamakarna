@@ -3,6 +3,7 @@ import database
 import confparser
 from logger import logging
 
+
 class RedditScraper:
 
     def __init__(self, subreddit: str, limit: int):
@@ -30,7 +31,8 @@ class RedditScraper:
                     "url": "https://reddit.com" + post.permalink,
                     "id": post.id,
                     "text": post.selftext,
-                    "upvote_count": post.score,}
+                    "upvote_count": post.score,
+                    "timestamp": post.created}
                 post_data.append(data)
         return post_data
 

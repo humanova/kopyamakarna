@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <h1>Kopyamakarna</h1>
             {% for pasta in pastas %}
-                <li><a href="/pasta/{{ pasta.id }}" >{{pasta.title}}</a></li>
+                <li><a href="/pasta/{{ pasta.id }}" >{{pasta.title}} - {{pasta.index_score}}</a></li>
             {% endfor %}
         </div>
       <div class="col-md-2"></div>
