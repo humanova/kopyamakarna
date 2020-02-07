@@ -4,7 +4,7 @@
       <div class="col-md-2">
           <p>rastgele makarnalar</p>
           {% for p in random_pastas %}
-                <li><a href="/pasta/{{ p.id }}" >{{p.title}}</a></li>
+                <li><a href="/pasta/{{ p.id }}" >{{p.title[:40]}}</a></li>
           {% endfor %}
       </div>
         <div class="col-md-8">

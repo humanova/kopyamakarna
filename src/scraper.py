@@ -31,7 +31,7 @@ class RedditScraper:
                     "url": "https://reddit.com" + post.permalink,
                     "id": post.id,
                     "text": post.selftext,
-                    "upvote_count": post.score,
+                    "upvote": post.score,
                     "timestamp": post.created}
                 post_data.append(data)
         return post_data
@@ -40,15 +40,20 @@ class RedditScraper:
         logging.info("[Scraper] Trying to scrape new posts")
         reddit_posts = self.get_posts()
         new_posts = list()
+        tb_updated_posts = list()
 
         for p in reddit_posts:
             if not p['id'] in self.db_ids:
                 new_posts.append(p)
                 self.db_ids.append(p['id'])
+            else:
+                tb_updated_posts.append(p)
 
         if len(new_posts) > 0:
             logging.info(f"[Scraper] Scraped {len(new_posts)} new post(s)")
             self.add_posts_to_db(new_posts)
+
+        self.update_scraped_posts_to_db(tb_updated_posts)
 
     def add_posts_to_db(self, posts):
         self.database.add_pastas(posts)
@@ -56,6 +61,8 @@ class RedditScraper:
     def add_post_to_db(self, post):
         self.database.add_pasta(post)
 
+    def update_scraped_posts_to_db(self, posts):
+        self.database.update_pastas(posts)
 
 if __name__ == "__main__":
     rs = RedditScraper("kopyamakarna", limit=50000)

@@ -66,7 +66,7 @@ class DB:
                     id= post['id'],
                     title= post['title'],
                     url= post['url'],
-                    upvote= post['upvote_count'],
+                    upvote= post['upvote'],
                     text= post['text'],
                     timestamp= post['timestamp'],
                     index_score= 0
@@ -91,6 +91,18 @@ class DB:
                 return fp_pasta
         except Exception as e:
             logging.exception(f'[DB] Error while adding frontpage_pasta : {e}')
+
+    def update_pastas(self, posts):
+        try:
+            for p in posts:
+                pasta = self.get_pasta_by_id(p['id'])
+                pasta.upvote = p['upvote']
+                pasta.save(only=[Pasta.upvote])
+            logging.info(f'[DB] {len(posts)} pasta(s) has been updated')
+        except Exception as e:
+            logging.exception(f'[DB] Error while updating pastas : {e}')
+
+
 
     def search_pasta_by_text(self, text):
         pasta_list = list()
@@ -120,17 +132,19 @@ class DB:
 
     def update_pasta_indexes(self):
         pastas = self.get_all_pasta()
-        for pasta in pastas:
-            seconds = pasta.timestamp - 1540771200
-            order = math.log(pasta.upvote, 10)
-            pasta.index_score = round(order + seconds / 45000, 7)
+        try:
+            for pasta in pastas:
+                seconds = pasta.timestamp - 1540771200
+                order = math.log(pasta.upvote, 10)
+                pasta.index_score = round(order + seconds / 45000, 7)
 
-            pasta.save(only=[Pasta.index_score])
+                pasta.save(only=[Pasta.index_score])
+        except Exception as e:
+            logging.exception(f'[DB] Error while updating pasta index scores : {e}')
 
-    # call update_pasta_indexes first
+    # do update_pasta_indexes first
     def update_frontpage(self):
         FrontpagePasta.delete().execute()
         # sort Pasta table and update FrontpagePasta
         for pasta in Pasta.select().order_by(Pasta.index_score.desc())[:30]:
             self.add_frontpage_pasta(pasta)
-

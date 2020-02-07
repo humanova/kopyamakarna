@@ -7,6 +7,7 @@ app = Flask("kopyamakarna", template_folder="src/templates")
 
 
 @app.route('/')
+@app.route('/index')
 def index():
     fp_pastas = db.get_all_frontpage_pasta()
     return render_template('index.html', pastas=fp_pastas)
