@@ -1,9 +1,9 @@
 import praw
 import database
 import confparser
+from logger import logging
 
-
-class RedditScraper():
+class RedditScraper:
 
     def __init__(self, subreddit: str, limit: int):
         self.sub = subreddit
@@ -30,20 +30,29 @@ class RedditScraper():
                     "url": "https://reddit.com" + post.permalink,
                     "id": post.id,
                     "text": post.selftext,
-                    "upvote_count": post.score,
-                }
+                    "upvote_count": post.score,}
                 post_data.append(data)
         return post_data
 
     def scrape(self):
+        logging.info("[Scraper] Trying to scrape new posts")
         reddit_posts = self.get_posts()
-        for p in reddit_posts:
-            self.add_to_db(p)
+        new_posts = list()
 
-    def add_to_db(self, post):
-        if not post['id'] in self.db_ids:
-            self.database.add_pasta(post)
-            self.db_ids.append(post['id'])
+        for p in reddit_posts:
+            if not p['id'] in self.db_ids:
+                new_posts.append(p)
+                self.db_ids.append(p['id'])
+
+        if len(new_posts) > 0:
+            logging.info(f"[Scraper] Scraped {len(new_posts)} new post(s)")
+            self.add_posts_to_db(new_posts)
+
+    def add_posts_to_db(self, posts):
+        self.database.add_pastas(posts)
+
+    def add_post_to_db(self, post):
+        self.database.add_pasta(post)
 
 
 if __name__ == "__main__":

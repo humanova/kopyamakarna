@@ -1,4 +1,6 @@
 from peewee import *
+from logger import logging
+
 
 db = SqliteDatabase("posts/posts.db")
 
@@ -15,7 +17,6 @@ class Pasta(BaseModel):
     upvote = IntegerField()
     text = CharField()
 
-
 class DB:
 
     def __init__(self):
@@ -26,34 +27,40 @@ class DB:
         try:
             db.create_tables([Pasta])
         except Exception as e:
-            print("Couldn't create tables, it may already exist in db...")
-            print(e)
+            logging.exception(f"[DB] Couldn't create tables, it may already exist in db : {e})")
 
     def connect(self):
         try:
             db.connect()
             self.connected = True
         except Exception as e:
-            print(f"Couldn't connect to db")
-            print(e)
+            logging.exception(f"[DB] Couldn't connect to db : {e}")
+
+    def add_pastas(self, post_list):
+        try:
+            for p in post_list:
+                self.add_pasta(p)
+            logging.info(f'[DB] {len(post_list)} new pasta(s) has been added to Pasta table')
+        except Exception as e:
+            logging.exception(f'[DB] Error while adding pasta_list : {e}')
 
     def add_pasta(self, post):
         try:
             with db.atomic():
-                word = Pasta.create(
+                pasta = Pasta.create(
                     id= post['id'],
                     title= post['title'],
                     url= post['url'],
                     upvote= post['upvote_count'],
                     text= post['text']
                 )
-                print(f"[DB] new pasta -> : {post['id']}")
-                return word
+                #logging.info(f"new pasta -> : {post['id']}")
+                return pasta
         except Exception as e:
-            print(f'Error while adding pasta : {e}')
+            logging.exception(f'[DB] Error while adding pasta : {e}')
 
     def search_pasta_by_text(self, text):
-        pasta_list = []
+        pasta_list = list()
         pasta_list.append(Pasta.select().where(Pasta.title.contains(text)))
         for p in Pasta.select().where(Pasta.text.contains(text)):
             if p not in pasta_list:
@@ -61,9 +68,9 @@ class DB:
         pasta_list.remove(pasta_list[0])
         return pasta_list
 
-    def get_pasta_by_id(self, id):
+    def get_pasta_by_id(self, pasta_id):
         try:
-            pasta = Pasta.select().where(Pasta.id == id).get()
+            pasta = Pasta.select().where(Pasta.id == pasta_id).get()
             return pasta
         except:
             return None

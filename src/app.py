@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, request
+from flask import Flask, url_for, render_template, request, redirect
 import database
 import random
 
@@ -8,10 +8,13 @@ app = Flask("kopyamakarna", template_folder="src/templates")
 
 @app.route('/')
 def index():
-    #ids = db.get_ids()
+    # TODO : index page
+    return redirect(url_for('all'))
+
+@app.route('/all')
+def all():
     pastas = db.get_all_pasta()
     return render_template('index.html', pastas=pastas)
-
 
 @app.route('/pasta/<pasta_id>')
 def pasta(pasta_id):
